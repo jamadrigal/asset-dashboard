@@ -84,7 +84,7 @@ const AssetModal: React.FC<AssetModalProps> = ({ asset, onClose }) => {
               <div className="p-4 w-full border border-gray-200 text-left rounded-md">
                 <div>Net Worth</div>
                 <h1 className="text-xl">
-                  $
+                  {/* {  total of all assets, didnt have time to calculate} */}$
                   {asset.balanceCurrent.toLocaleString("en-US", {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,

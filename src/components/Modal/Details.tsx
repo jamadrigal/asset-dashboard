@@ -52,6 +52,7 @@ const Details: React.FC<DetailsProps> = ({ info }) => {
             if (key === "asOfDate") {
               return (
                 <div key={key}>
+                    {/* {{ I would create a function to seperate the word}} */}
                   <strong className="text-sm">{key.toUpperCase()}: </strong>
                   <span>{formatDate(assetsData[key])}</span>
                 </div>
@@ -61,6 +62,7 @@ const Details: React.FC<DetailsProps> = ({ info }) => {
             if (key === "estimateValue" || key === "purchaseCost") {
               return (
                 <div key={key}>
+                  {/* {{ I would create a function to seperate the word}} */}
                   <strong className="text-sm">{key.toUpperCase()}: </strong>
                   <span>${assetsData[key]}</span>
                 </div>
@@ -70,6 +72,7 @@ const Details: React.FC<DetailsProps> = ({ info }) => {
             if (typeof assetsData[key] === "boolean") {
               return (
                 <div key={key}>
+                    {/* {{ I would create a function to seperate the word}} */}
                   <strong className="text-sm">{key.toUpperCase()}: </strong>
                   <span>{assetsData[key] ? "Yes" : "No"}</span>
                 </div>
@@ -79,6 +82,7 @@ const Details: React.FC<DetailsProps> = ({ info }) => {
             return (
               <div key={key}>
                 <strong className="text-sm">
+                    {/* {{ I would create a function to seperate the word}} */}
                   {key.toUpperCase()}: {"  "}
                 </strong>
                 <span>{assetsData[key]}</span>
