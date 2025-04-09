@@ -4,14 +4,14 @@
 Follow these steps to get the project running:
 --before running frontend make sure the Apollo server is running--
 
-## Prerequisites:
+### Prerequisites:
 Node.js ((https://nodejs.org/en/download))
 npm or yarn (https://classic.yarnpkg.com/lang/en/docs/install)
 
-## Steps
+### Steps
 1. Clone the repository:
-`git clone <repository_url>`
-`cd <asset-dashboard>`
+`git clone https://github.com/jamadrigal/asset-dashboard.git`
+`cd asset-dashboard`
 
 2. Install dependencies:
 `npm install`
@@ -21,7 +21,7 @@ npm or yarn (https://classic.yarnpkg.com/lang/en/docs/install)
 3. Start the development server:
  `npm start`
     or
- `npm start`
+ `yarn start`
 
 Runs the app in the development mode.
 This will launch the application in your default browser, typically at http://localhost:3000
