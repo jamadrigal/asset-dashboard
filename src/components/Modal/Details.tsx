@@ -1,94 +1,69 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { formatDate } from "../../utils/date";
+import { formatKey } from "../../utils/format";
+import { parseAssetInfo } from "../../utils/parse";
 
 interface DetailsProps {
   info: string;
 }
 
 const Details: React.FC<DetailsProps> = ({ info }) => {
-  const [assetsData, setAssetsData] = useState(null);
-
-  useEffect(() => {
-    try {
-      const parsedData = JSON.parse(info);
-      setAssetsData(parsedData);
-    } catch (error) {
-      console.error("Error parsing JSON", error);
-    }
-  }, [info]);
+  const assetsData = parseAssetInfo(info);
 
   if (!assetsData) {
-    return <div>Loading...</div>;
+    return (
+      <div className="p-10 border border-gray-200 text-center rounded-md">
+        Loading...
+      </div>
+    );
   }
 
-  const formatDate = (dateS: string) => {
-    if (!dateS) return "";
-    const d = new Date(dateS);
-    const formattedDate = d.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-    return formattedDate;
+  const renderValue = (key: string, value: any) => {
+    if (value === "" || value === null || value === undefined) {
+      return null;
+    }
+
+    if (key === "holdings") {
+      return null;
+    }
+
+    if (key === "asOfDate") {
+      return <span>{formatDate(value)}</span>;
+    }
+
+    if (key === "estimateValue" || key === "purchaseCost") {
+      return <span>${value.toLocaleString()}</span>;
+    }
+
+    if (typeof value === "boolean") {
+      return <span>{value ? "Yes" : "No"}</span>;
+    }
+
+    return <span>{value}</span>;
   };
 
   return (
-    <div className="p-4 bg-white rounded-lg shadow-md w-full max-w-md mx-auto">
-      <h2 className="text-xl font-bold mb-4">Asset Details</h2>
+    <div className="p-6 bg-white rounded-lg shadow-sm">
+      <h2 className="text-xl font-semibold mb-6 text-gray-800">
+        Asset Details
+      </h2>
       <div className="space-y-4">
-        {assetsData &&
-          Object.keys(assetsData).map((key) => {
-            if (
-              assetsData[key] === "" ||
-              assetsData[key] === null ||
-              assetsData[key] === undefined
-            ) {
-              return null;
-            }
+        {Object.entries(assetsData).map(([key, value]) => {
+          const formattedValue = renderValue(key, value);
+          if (!formattedValue) return null;
 
-            if (key === "holdings") {
-              return null;
-            }
-
-            if (key === "asOfDate") {
-              return (
-                <div key={key}>
-                    {/* {{ I would create a function to seperate the word}} */}
-                  <strong className="text-sm">{key.toUpperCase()}: </strong>
-                  <span>{formatDate(assetsData[key])}</span>
-                </div>
-              );
-            }
-
-            if (key === "estimateValue" || key === "purchaseCost") {
-              return (
-                <div key={key}>
-                  {/* {{ I would create a function to seperate the word}} */}
-                  <strong className="text-sm">{key.toUpperCase()}: </strong>
-                  <span>${assetsData[key]}</span>
-                </div>
-              );
-            }
-
-            if (typeof assetsData[key] === "boolean") {
-              return (
-                <div key={key}>
-                    {/* {{ I would create a function to seperate the word}} */}
-                  <strong className="text-sm">{key.toUpperCase()}: </strong>
-                  <span>{assetsData[key] ? "Yes" : "No"}</span>
-                </div>
-              );
-            }
-
-            return (
-              <div key={key}>
-                <strong className="text-sm">
-                    {/* {{ I would create a function to seperate the word}} */}
-                  {key.toUpperCase()}: {"  "}
-                </strong>
-                <span>{assetsData[key]}</span>
-              </div>
-            );
-          })}
+          return (
+            <div
+              key={key}
+              className="flex justify-between items-start py-2 border-b border-gray-100 last:border-0"
+            >
+              <span className="text-sm font-medium text-gray-600">
+                {formatKey(key)}
+              </span>
+              <span className="text-sm text-gray-800">{formattedValue}</span>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

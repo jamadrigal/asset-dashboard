@@ -1,25 +1,21 @@
 import React, { useState } from "react";
 import HoldingsTab from "./HoldingsTab";
 import Details from "./Details";
+import { Asset } from "../../types/asset";
+import OverviewTab from "./OverviewTab";
 
 interface AssetModalProps {
-  asset: any;
+  asset: Asset;
+  netWorth: number;
   onClose: () => void;
 }
 
-const AssetModal: React.FC<AssetModalProps> = ({ asset, onClose }) => {
+const AssetModal: React.FC<AssetModalProps> = ({
+  asset,
+  netWorth,
+  onClose,
+}) => {
   const [activeTab, setActiveTab] = useState("overview");
-
-  const formatDate = (dateS: string) => {
-    if (!dateS) return "";
-    const d = new Date(dateS);
-    const formattedDate = d.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-    return formattedDate;
-  };
 
   const holdings = asset?.holdings || [];
 
@@ -34,8 +30,7 @@ const AssetModal: React.FC<AssetModalProps> = ({ asset, onClose }) => {
         <h1 className="text-xl font-bold text-left">
           {asset.primaryAssetCategory}
         </h1>
-        <div className="text-l text-left py-2">
-          {" "}
+        <div className="text-left py-2">
           {asset.wealthAssetType} &#8226; {asset.nickname}{" "}
         </div>
 
@@ -69,36 +64,16 @@ const AssetModal: React.FC<AssetModalProps> = ({ asset, onClose }) => {
         {/* Tab Content */}
         <div className="mt-4">
           {activeTab === "overview" && (
-            <div className="flex gap-x-8 w-full">
-              <div className="w-full p-4 border border-gray-200 text-left rounded-md ml-2">
-                <div>Current Value</div>
-                <h1 className="text-xl">
-                  $
-                  {asset.balanceCurrent.toLocaleString("en-US", {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })}
-                </h1>
-                <div>As of {formatDate(asset.balanceAsOf)}</div>
-              </div>
-              <div className="p-4 w-full border border-gray-200 text-left rounded-md">
-                <div>Net Worth</div>
-                <h1 className="text-xl">
-                  {/* {  total of all assets, didnt have time to calculate} */}$
-                  {asset.balanceCurrent.toLocaleString("en-US", {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })}
-                </h1>
-                <div>Included in Networth</div>
-              </div>
-            </div>
+            <OverviewTab asset={asset} netWorth={netWorth} />
           )}
           {activeTab === "holdings" && (
             <div>
-              {holdings && holdings.length !== 0 ? (
+              {holdings && "majorAssetClasses" in holdings ? (
                 <div>
-                  <HoldingsTab holdings={holdings} />
+                  <HoldingsTab
+                    holdings={holdings}
+                    currentBalance={asset.balanceCurrent}
+                  />
                 </div>
               ) : (
                 <div className="p-10 border border-gray-200 text-center rounded-md ">
